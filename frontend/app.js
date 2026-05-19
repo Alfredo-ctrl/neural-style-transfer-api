@@ -104,12 +104,12 @@ function setLoading(loading) {
   }
 }
 
-function setStatus(status, jobId) {
+function setStatus(status, jobId, message) {
   statusBar.hidden = false;
   statusIndicator.className = "status-indicator";
   if (status === "completed") statusIndicator.classList.add("completed");
   if (status === "failed") statusIndicator.classList.add("failed");
-  statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+  statusText.textContent = message || (status.charAt(0).toUpperCase() + status.slice(1));
   jobIdDisplay.textContent = jobId ? `#${jobId.slice(0, 8)}` : "";
 }
 
@@ -126,12 +126,12 @@ async function pollJob(jobId) {
     } else if (data.status === "failed") {
       clearInterval(pollingInterval);
       setLoading(false);
-      statusText.textContent = `Failed: ${data.error || "unknown error"}`;
+      setStatus("failed", jobId, `Transfer failed: ${data.error || "unknown error"}`);
     }
   } catch {
     clearInterval(pollingInterval);
     setLoading(false);
-    statusText.textContent = "Network error while polling.";
+    setStatus("failed", null, "Network error while polling status.");
   }
 }
 
@@ -152,7 +152,14 @@ async function showResult(jobId) {
 transferBtn.addEventListener("click", async () => {
   if (!contentFile || !styleFile) return;
 
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+    pollingInterval = null;
+  }
+
   resultPanel.hidden = true;
+  resultImage.src = "";
+  statusBar.hidden = true;
   setLoading(true);
 
   const formData = new FormData();
@@ -166,22 +173,20 @@ transferBtn.addEventListener("click", async () => {
     });
 
     if (!res.ok) {
-      const err = await res.json();
+      let detail = res.statusText;
+      try { detail = (await res.json()).detail || detail; } catch {}
       setLoading(false);
-      setStatus("failed", null);
-      statusText.textContent = `Error: ${err.detail || res.statusText}`;
+      setStatus("failed", null, `API error: ${detail}`);
       return;
     }
 
     const data = await res.json();
     currentJobId = data.job_id;
-    setStatus("queued", currentJobId);
-    statusBar.hidden = false;
+    setStatus("queued", currentJobId, "Queued — processing may take 1-3 minutes");
 
     pollingInterval = setInterval(() => pollJob(currentJobId), 3000);
   } catch {
     setLoading(false);
-    setStatus("failed", null);
-    statusText.textContent = "Failed to submit job. Is the server running?";
+    setStatus("failed", null, "Cannot reach the API. Run 'python server.py' to start the backend.");
   }
 });
