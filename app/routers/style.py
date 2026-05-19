@@ -2,7 +2,7 @@ import os
 import uuid
 import aiofiles
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
 
 from app.core.config import settings
@@ -27,6 +27,9 @@ async def _save_upload(file: UploadFile, directory: str) -> str:
 async def submit_transfer(
     content_image: UploadFile = File(..., description="Content image to stylize"),
     style_image: UploadFile = File(..., description="Reference style image"),
+    iterations: int = Form(settings.STYLE_ITERATIONS, ge=1, le=1000, description="Optimization iterations"),
+    style_weight: float = Form(settings.STYLE_WEIGHT, gt=0, description="Style loss weight"),
+    content_weight: float = Form(settings.CONTENT_WEIGHT, gt=0, description="Content loss weight"),
 ):
     validate_image(content_image)
     validate_image(style_image)
@@ -39,9 +42,9 @@ async def submit_transfer(
         content_path=content_path,
         style_path=style_path,
         output_dir=settings.OUTPUT_DIR,
-        iterations=settings.STYLE_ITERATIONS,
-        style_weight=settings.STYLE_WEIGHT,
-        content_weight=settings.CONTENT_WEIGHT,
+        iterations=iterations,
+        style_weight=style_weight,
+        content_weight=content_weight,
     )
 
     return JSONResponse(

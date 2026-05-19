@@ -165,6 +165,8 @@ transferBtn.addEventListener("click", async () => {
   const formData = new FormData();
   formData.append("content_image", contentFile);
   formData.append("style_image", styleFile);
+  formData.append("iterations", iterationsInput.value);
+  formData.append("style_weight", styleWeightInput.value);
 
   try {
     const res = await fetch(`${API_BASE}/style/transfer`, {
@@ -182,7 +184,7 @@ transferBtn.addEventListener("click", async () => {
 
     const data = await res.json();
     currentJobId = data.job_id;
-    setStatus("queued", currentJobId, "Queued — processing may take 1-3 minutes");
+    setStatus("queued", currentJobId, "Queued - processing may take 1-3 minutes");
 
     pollingInterval = setInterval(() => pollJob(currentJobId), 3000);
   } catch {

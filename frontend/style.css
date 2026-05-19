@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --bg: hsl(222, 24%, 7%);
   --bg-surface: hsl(222, 20%, 11%);
