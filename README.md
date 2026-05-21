@@ -1,81 +1,80 @@
 # Neural Style Transfer API
 
-A production-ready REST API that applies artistic styles to photographs using a VGG19-based neural style transfer pipeline built with FastAPI and PyTorch.
+A FastAPI and PyTorch project for applying neural style transfer to images. The app includes a focused web workbench and a documented API for submitting style transfer jobs, checking status, and downloading results.
 
-## Overview
+![NST Engine workbench](assets/nst-workbench.png)
 
-Neural Style Transfer (NST) optimizes a generated image to simultaneously match the content of one photograph and the artistic texture of another. This implementation uses Gram-matrix-based style loss across five VGG19 convolutional layers and minimizes the combined loss using the L-BFGS second-order optimizer.
+## What It Does
 
-The project ships with a premium web frontend for interactive use and a fully documented REST API for programmatic integration.
+- Accepts a content image and a style reference image.
+- Runs a VGG19-based neural style transfer pipeline.
+- Uses content loss, Gram matrix style loss, and L-BFGS optimization.
+- Processes jobs asynchronously so requests return quickly.
+- Serves a clean browser workbench for local testing.
+- Exposes API documentation through Swagger UI.
 
-## Architecture
+## Project Structure
 
-```
+```text
 neural-style-transfer-api/
-├── app/
-│   ├── core/
-│   │   ├── config.py          # Environment-driven settings
-│   │   └── validators.py      # File type and size validation
-│   ├── routers/
-│   │   ├── style.py           # /style/* endpoints
-│   │   └── health.py          # /health endpoint
-│   ├── services/
-│   │   └── style_transfer.py  # VGG19 NST engine, async job queue
-│   └── main.py                # FastAPI application factory
-├── frontend/
-│   ├── index.html             # Single-page application
-│   ├── style.css              # Dark-mode premium UI
-│   └── app.js                 # Drag-and-drop + job polling client
-├── server.py                  # Development server entrypoint
-├── Dockerfile
-├── requirements.txt
-└── .env.example
+  app/
+    core/
+      config.py
+      validators.py
+    routers/
+      health.py
+      style.py
+    services/
+      style_transfer.py
+    main.py
+  frontend/
+    index.html
+    style.css
+    app.js
+  server.py
+  Dockerfile
+  requirements.txt
 ```
 
-## Technical Details
-
-### Style Transfer Engine
-
-- Model: VGG19 pre-trained on ImageNet (frozen weights, used as a feature extractor only)
-- Content layers: `conv_4`
-- Style layers: `conv_1` through `conv_5`
-- Loss function: weighted MSE between Gram matrices (style) and feature activations (content)
-- Optimizer: L-BFGS with analytic gradient (superior convergence over Adam for this task)
-- Device: CUDA if available, CPU fallback
-
-### API Design
-
-The transfer endpoint is non-blocking. It accepts a multipart form submission, enqueues the job as an async background task, and returns a `job_id` immediately with HTTP 202. Clients poll the status endpoint and fetch the result when the job reaches `completed` state.
+## API
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/health` | Service health, CUDA status |
+| GET | `/health` | Service health and CUDA status |
 | POST | `/style/transfer` | Submit a style transfer job |
-| GET | `/style/status/{job_id}` | Poll job status |
-| GET | `/style/result/{job_id}` | Download stylized PNG |
-| GET | `/docs` | Interactive Swagger UI |
-
-## Requirements
-
-- Python 3.11+
-- PyTorch 2.3+ (CUDA optional but recommended for speed)
+| GET | `/style/status/{job_id}` | Check job status |
+| GET | `/style/result/{job_id}` | Download the stylized PNG |
+| GET | `/docs` | Swagger UI |
 
 ## Setup
 
 ```bash
-git clone https://github.com/Alfredo-ctrl/neural-style-transfer-api
-cd neural-style-transfer-api
-
 python -m venv venv
-source venv/bin/activate
-
+venv\Scripts\activate
 pip install -r requirements.txt
-
-cp .env.example .env
 python server.py
 ```
 
-Open `http://localhost:8000` in your browser.
+Open:
+
+```text
+http://localhost:8000
+```
+
+## Configuration
+
+Environment variables can be placed in `.env`.
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `HOST` | `0.0.0.0` | Server bind address |
+| `PORT` | `8000` | Server port |
+| `UPLOAD_DIR` | `uploads` | Uploaded image folder |
+| `OUTPUT_DIR` | `outputs` | Generated result folder |
+| `STYLE_ITERATIONS` | `300` | Optimization iterations |
+| `STYLE_WEIGHT` | `1000000` | Style loss weight |
+| `CONTENT_WEIGHT` | `1` | Content loss weight |
+| `MAX_IMAGE_SIZE_MB` | `10` | Upload size limit |
 
 ## Docker
 
@@ -84,26 +83,10 @@ docker build -t nst-api .
 docker run -p 8000:8000 nst-api
 ```
 
-## Configuration
+## Notes
 
-All parameters are configurable via environment variables in `.env`:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `HOST` | `0.0.0.0` | Bind address |
-| `PORT` | `8000` | Bind port |
-| `STYLE_ITERATIONS` | `300` | L-BFGS optimization steps |
-| `STYLE_WEIGHT` | `1000000` | Weight of style loss term |
-| `CONTENT_WEIGHT` | `1` | Weight of content loss term |
-| `MAX_IMAGE_SIZE_MB` | `10` | Maximum upload size |
-
-## Code Standards
-
-- No comments in source code
-- No emojis anywhere
-- Type annotations throughout
-- Senior-level architecture: clean separation of configuration, validation, service, and transport layers
+The first run may download VGG19 weights. CPU execution works but can take several minutes depending on image size and iteration count.
 
 ## Author
 
-Alfredo Oliva — [GitHub](https://github.com/Alfredo-ctrl)
+Alfredo Oliva
