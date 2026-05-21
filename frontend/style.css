@@ -77,16 +77,31 @@ button {
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border-radius: var(--radius);
-  background: var(--ink);
-  color: var(--surface);
-  font-size: 12px;
-  font-weight: 800;
+.brand-glyph {
+  position: relative;
+  width: 58px;
+  height: 32px;
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+.brand-glyph i {
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 3px;
+  background: var(--accent);
+  transform: translateY(-50%) rotate(-18deg);
+}
+
+.brand-glyph i:first-child {
+  left: 2px;
+}
+
+.brand-glyph i:last-child {
+  right: 2px;
+  background: var(--blue);
+  transform: translateY(-50%) rotate(18deg);
 }
 
 .brand strong,
