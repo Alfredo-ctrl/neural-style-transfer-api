@@ -56,18 +56,28 @@ button {
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 20;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
-  min-height: 74px;
-  padding: 16px 28px;
-  border-bottom: 1px solid rgba(30, 37, 43, 0.1);
-  background: rgba(244, 241, 235, 0.9);
-  backdrop-filter: blur(14px);
+  width: min(1220px, calc(100% - 36px));
+  margin: 22px auto 0;
+  padding: 14px 0;
+  border-top: 5px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 28px, transparent 28px 40px, var(--blue) 40px 66px, transparent 66px 78px);
 }
 
 .brand {
@@ -145,10 +155,15 @@ button {
   background: var(--surface);
 }
 
+.nav a:hover {
+  background: var(--ink);
+  color: var(--surface);
+}
+
 .shell {
   width: min(1220px, calc(100% - 36px));
   margin: 0 auto;
-  padding: 38px 0 72px;
+  padding: 30px 0 72px;
 }
 
 .masthead {
@@ -156,7 +171,16 @@ button {
   grid-template-columns: minmax(0, 1fr) minmax(260px, 430px);
   gap: 24px;
   align-items: end;
+  min-height: 430px;
   margin-bottom: 24px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 76% 34%, rgba(190, 94, 59, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(45, 93, 115, 0.13), transparent 50%),
+    rgba(255, 253, 248, 0.78);
+  box-shadow: var(--shadow);
 }
 
 .eyebrow {
@@ -468,8 +492,7 @@ button {
 
 @media (max-width: 640px) {
   .topbar {
-    align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
     padding: 16px;
   }
 
