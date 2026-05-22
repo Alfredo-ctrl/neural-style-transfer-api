@@ -27,6 +27,79 @@ let contentFile = null;
 let styleFile = null;
 let pollingInterval = null;
 let currentJobId = null;
+let uiLang = "en";
+
+const uiCopy = {
+  en: {
+    brand: "NST Engine",
+    tagline: "Image style workbench",
+    apiDocs: "API Docs",
+    repo: "Repository",
+    eyebrow: "PyTorch image lab",
+    headline: "Blend a photo with a reference style.",
+    lede: "Upload one content image, one style image, tune the optimization, then let the backend produce a stylized PNG.",
+    contentImage: "Content image",
+    contentHint: "The photo or scene to preserve.",
+    styleImage: "Style image",
+    styleHint: "The color, texture, and brushwork source.",
+    runSetup: "Run setup",
+    iterations: "Iterations",
+    styleWeight: "Style weight",
+    runTransfer: "Run transfer",
+    contentNoteTitle: "Content",
+    contentNote: "Preserves structure and object layout.",
+    styleNoteTitle: "Style",
+    styleNote: "Transfers texture statistics through Gram loss.",
+    outputNoteTitle: "Output",
+    outputNote: "Available as a PNG when the job completes.",
+    featureTitle: "Feature extraction",
+    featureCopy: "VGG19 reads content and style features from selected convolutional layers.",
+    optimizationTitle: "Optimization",
+    optimizationCopy: "L-BFGS updates the output image directly instead of training a new model.",
+    deliveryTitle: "Delivery",
+    deliveryCopy: "The FastAPI backend runs jobs asynchronously and serves completed images."
+  },
+  es: {
+    brand: "NST Engine",
+    tagline: "Estudio visual de transferencia",
+    apiDocs: "Docs API",
+    repo: "Repositorio",
+    eyebrow: "Laboratorio de imagen con PyTorch",
+    headline: "Mezcla una foto con un estilo de referencia.",
+    lede: "Sube una imagen de contenido y una de estilo, ajusta la optimizacion y deja que el backend genere un PNG estilizado.",
+    contentImage: "Imagen base",
+    contentHint: "La foto o escena que quieres conservar.",
+    styleImage: "Imagen de estilo",
+    styleHint: "La fuente de color, textura y trazos.",
+    runSetup: "Configuracion",
+    iterations: "Iteraciones",
+    styleWeight: "Peso de estilo",
+    runTransfer: "Ejecutar transferencia",
+    contentNoteTitle: "Contenido",
+    contentNote: "Conserva estructura y composicion.",
+    styleNoteTitle: "Estilo",
+    styleNote: "Transfiere texturas usando Gram loss.",
+    outputNoteTitle: "Salida",
+    outputNote: "Disponible como PNG al terminar el trabajo.",
+    featureTitle: "Extraccion de rasgos",
+    featureCopy: "VGG19 lee rasgos de contenido y estilo desde capas convolucionales.",
+    optimizationTitle: "Optimizacion",
+    optimizationCopy: "L-BFGS actualiza la imagen final directamente sin entrenar un modelo nuevo.",
+    deliveryTitle: "Entrega",
+    deliveryCopy: "FastAPI ejecuta trabajos asincronos y sirve las imagenes completadas."
+  }
+};
+
+function applyUiLanguage(nextLang) {
+  uiLang = nextLang;
+  document.documentElement.lang = uiLang;
+  const toggle = document.querySelector(".language-switch");
+  if (toggle) toggle.setAttribute("aria-pressed", String(uiLang === "es"));
+  document.querySelectorAll("[data-i18n]").forEach(node => {
+    const value = uiCopy[uiLang][node.dataset.i18n];
+    if (value) node.textContent = value;
+  });
+}
 
 function formatStyleWeight(val) {
   const n = parseInt(val, 10);
@@ -192,3 +265,16 @@ transferBtn.addEventListener("click", async () => {
     setStatus("failed", null, "Cannot reach the API. Run 'python server.py' to start the backend.");
   }
 });
+
+document.querySelector(".language-switch")?.addEventListener("click", () => {
+  applyUiLanguage(uiLang === "en" ? "es" : "en");
+});
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("is-visible");
+  });
+}, { threshold: 0.16 });
+
+document.querySelectorAll("[data-reveal]").forEach(node => revealObserver.observe(node));
+applyUiLanguage(uiLang);

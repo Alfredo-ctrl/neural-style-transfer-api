@@ -30,6 +30,7 @@
 }
 
 body {
+  position: relative;
   min-height: 100vh;
   background:
     linear-gradient(90deg, rgba(45, 93, 115, 0.08), transparent 44%),
@@ -40,6 +41,22 @@ body {
   font-size: 15px;
   line-height: 1.5;
   overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  background:
+    linear-gradient(115deg, transparent 0 35%, rgba(190, 94, 59, 0.12) 43%, transparent 55%),
+    linear-gradient(65deg, transparent 0 50%, rgba(45, 93, 115, 0.12) 56%, transparent 70%);
+  animation: studio-wash 12s ease-in-out infinite alternate;
+}
+
+@keyframes studio-wash {
+  from { transform: translate3d(-4%, -2%, 0) rotate(-2deg); }
+  to { transform: translate3d(4%, 2%, 0) rotate(2deg); }
 }
 
 a {
@@ -83,35 +100,7 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   text-decoration: none;
-}
-
-.brand-glyph {
-  position: relative;
-  width: 58px;
-  height: 32px;
-  border-top: 3px solid var(--ink);
-  border-bottom: 3px solid var(--ink);
-}
-
-.brand-glyph i {
-  position: absolute;
-  top: 50%;
-  width: 30px;
-  height: 3px;
-  background: var(--accent);
-  transform: translateY(-50%) rotate(-18deg);
-}
-
-.brand-glyph i:first-child {
-  left: 2px;
-}
-
-.brand-glyph i:last-child {
-  right: 2px;
-  background: var(--blue);
-  transform: translateY(-50%) rotate(18deg);
 }
 
 .brand strong,
@@ -160,6 +149,45 @@ button {
   color: var(--surface);
 }
 
+.language-switch {
+  display: grid;
+  grid-template-columns: auto 36px auto;
+  gap: 7px;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-switch i {
+  position: relative;
+  height: 19px;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.language-switch i::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: transform 0.22s ease;
+}
+
+.language-switch[aria-pressed="true"] i::before {
+  transform: translateX(17px);
+}
+
 .shell {
   width: min(1220px, calc(100% - 36px));
   margin: 0 auto;
@@ -181,6 +209,22 @@ button {
     linear-gradient(135deg, rgba(45, 93, 115, 0.13), transparent 50%),
     rgba(255, 253, 248, 0.78);
   box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+.masthead::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% 28px -10%;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 38px, transparent 38px 54px, var(--blue) 54px 88px, transparent 88px 112px);
+  opacity: 0.65;
+  animation: film-strip 10s linear infinite;
+}
+
+@keyframes film-strip {
+  to { transform: translateX(-112px); }
 }
 
 .eyebrow {
@@ -237,10 +281,12 @@ button {
     linear-gradient(135deg, rgba(45, 93, 115, 0.12), transparent),
     var(--surface);
   cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
 .upload-card:hover {
   border-color: var(--line-strong);
+  transform: translateY(-2px);
 }
 
 .upload-zone {
@@ -466,6 +512,17 @@ button {
 .method-strip p {
   margin-top: 6px;
   color: var(--muted);
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 980px) {

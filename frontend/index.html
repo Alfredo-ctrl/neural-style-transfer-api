@@ -10,38 +10,39 @@
 <body>
   <header class="topbar">
     <a class="brand" href="#">
-      <span class="brand-glyph">
-        <i></i>
-        <i></i>
-      </span>
       <span>
-        <strong>NST Engine</strong>
-        <small>Image style workbench</small>
+        <strong data-i18n="brand">NST Engine</strong>
+        <small data-i18n="tagline">Image style workbench</small>
       </span>
     </a>
     <nav class="nav">
-      <a href="/docs" target="_blank">API Docs</a>
-      <a href="https://github.com/Alfredo-ctrl/neural-style-transfer-api" target="_blank">Repository</a>
+      <button class="language-switch" type="button" aria-label="Switch language" aria-pressed="false">
+        <span>EN</span>
+        <i></i>
+        <span>ES</span>
+      </button>
+      <a href="/docs" target="_blank" data-i18n="apiDocs">API Docs</a>
+      <a href="https://github.com/Alfredo-ctrl/neural-style-transfer-api" target="_blank" data-i18n="repo">Repository</a>
     </nav>
   </header>
 
   <main class="shell">
-    <section class="masthead">
+    <section class="masthead" data-reveal>
       <div>
-        <p class="eyebrow">PyTorch image lab</p>
-        <h1>Blend a photo with a reference style.</h1>
+        <p class="eyebrow" data-i18n="eyebrow">PyTorch image lab</p>
+        <h1 data-i18n="headline">Blend a photo with a reference style.</h1>
       </div>
-      <p class="masthead-copy">Upload one content image, one style image, tune the optimization, then let the backend produce a stylized PNG.</p>
+      <p class="masthead-copy" data-i18n="lede">Upload one content image, one style image, tune the optimization, then let the backend produce a stylized PNG.</p>
     </section>
 
-    <section class="studio">
+    <section class="studio" data-reveal>
       <section class="upload-board">
         <div class="upload-card" id="content-card">
           <input type="file" id="content-input" accept="image/*" hidden>
           <div class="upload-zone" id="content-zone">
             <span class="slot-number">01</span>
-            <p class="upload-label">Content image</p>
-            <p class="upload-hint">The photo or scene to preserve.</p>
+            <p class="upload-label" data-i18n="contentImage">Content image</p>
+            <p class="upload-hint" data-i18n="contentHint">The photo or scene to preserve.</p>
           </div>
           <img id="content-preview" class="upload-preview" alt="Content preview">
         </div>
@@ -50,8 +51,8 @@
           <input type="file" id="style-input" accept="image/*" hidden>
           <div class="upload-zone" id="style-zone">
             <span class="slot-number">02</span>
-            <p class="upload-label">Style image</p>
-            <p class="upload-hint">The color, texture, and brushwork source.</p>
+            <p class="upload-label" data-i18n="styleImage">Style image</p>
+            <p class="upload-hint" data-i18n="styleHint">The color, texture, and brushwork source.</p>
           </div>
           <img id="style-preview" class="upload-preview" alt="Style preview">
         </div>
@@ -59,23 +60,23 @@
 
       <aside class="control-dock">
         <div class="dock-head">
-          <span>Run setup</span>
+          <span data-i18n="runSetup">Run setup</span>
           <strong>VGG19 transfer</strong>
         </div>
 
         <div class="controls">
           <div class="param-group">
-            <label class="param-label" for="iterations-input">Iterations <span id="iterations-val">300</span></label>
+            <label class="param-label" for="iterations-input"><span data-i18n="iterations">Iterations</span> <span id="iterations-val">300</span></label>
             <input type="range" id="iterations-input" class="param-range" min="50" max="600" step="50" value="300">
           </div>
           <div class="param-group">
-            <label class="param-label" for="style-weight-input">Style weight <span id="style-weight-val">1M</span></label>
+            <label class="param-label" for="style-weight-input"><span data-i18n="styleWeight">Style weight</span> <span id="style-weight-val">1M</span></label>
             <input type="range" id="style-weight-input" class="param-range" min="100000" max="10000000" step="100000" value="1000000">
           </div>
         </div>
 
         <button class="transfer-btn" id="transfer-btn" disabled>
-          <span class="btn-text">Run transfer</span>
+          <span class="btn-text" data-i18n="runTransfer">Run transfer</span>
           <span class="btn-spinner" hidden></span>
         </button>
 
@@ -87,16 +88,16 @@
 
         <div class="notes">
           <div>
-            <span>Content</span>
-            <p>Preserves structure and object layout.</p>
+            <span data-i18n="contentNoteTitle">Content</span>
+            <p data-i18n="contentNote">Preserves structure and object layout.</p>
           </div>
           <div>
-            <span>Style</span>
-            <p>Transfers texture statistics through Gram loss.</p>
+            <span data-i18n="styleNoteTitle">Style</span>
+            <p data-i18n="styleNote">Transfers texture statistics through Gram loss.</p>
           </div>
           <div>
-            <span>Output</span>
-            <p>Available as a PNG when the job completes.</p>
+            <span data-i18n="outputNoteTitle">Output</span>
+            <p data-i18n="outputNote">Available as a PNG when the job completes.</p>
           </div>
         </div>
       </aside>
@@ -115,18 +116,18 @@
       </div>
     </section>
 
-    <section class="method-strip">
+    <section class="method-strip" data-reveal>
       <div>
-        <span>Feature extraction</span>
-        <p>VGG19 reads content and style features from selected convolutional layers.</p>
+        <span data-i18n="featureTitle">Feature extraction</span>
+        <p data-i18n="featureCopy">VGG19 reads content and style features from selected convolutional layers.</p>
       </div>
       <div>
-        <span>Optimization</span>
-        <p>L-BFGS updates the output image directly instead of training a new model.</p>
+        <span data-i18n="optimizationTitle">Optimization</span>
+        <p data-i18n="optimizationCopy">L-BFGS updates the output image directly instead of training a new model.</p>
       </div>
       <div>
-        <span>Delivery</span>
-        <p>The FastAPI backend runs jobs asynchronously and serves completed images.</p>
+        <span data-i18n="deliveryTitle">Delivery</span>
+        <p data-i18n="deliveryCopy">The FastAPI backend runs jobs asynchronously and serves completed images.</p>
       </div>
     </section>
   </main>
