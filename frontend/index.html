@@ -32,7 +32,12 @@
         <p class="eyebrow" data-i18n="eyebrow">PyTorch image lab</p>
         <h1 data-i18n="headline">Blend a photo with a reference style.</h1>
       </div>
-      <p class="masthead-copy" data-i18n="lede">Upload one content image, one style image, tune the optimization, then let the backend produce a stylized PNG.</p>
+      <div class="masthead-side">
+        <p class="masthead-copy" data-i18n="lede">Upload one content image, one style image, tune the optimization, then let the backend produce a stylized PNG.</p>
+        <div class="parallax-frame masthead-parallax" aria-hidden="true">
+          <img src="assets/parallax-style.svg" alt="" data-parallax data-orientation="left" data-scale="1.2" data-delay="0.7">
+        </div>
+      </div>
     </section>
 
     <section class="studio" data-reveal>
@@ -132,6 +137,8 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.6.1/dist/simpleParallax.min.js"></script>
+  <script src="parallax.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
