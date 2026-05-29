@@ -1,3 +1,39 @@
+<!-- portfolio:start -->
+<p align="center">
+  <img src="assets/readme-hero.svg" alt="Neural Style Transfer API banner" width="100%" />
+</p>
+
+<h1 align="center">Neural Style Transfer API</h1>
+
+<p align="center"><strong>A FastAPI and VGG19 image engine with a gallery-like frontend for artistic transformation.</strong></p>
+
+<p align="center">
+<img alt="focus: deep learning" src="https://img.shields.io/badge/focus-deep%20learning-37d0ff?style=for-the-badge&labelColor=ff5c8a" />
+  <img alt="engine: VGG19" src="https://img.shields.io/badge/engine-VGG19-37d0ff?style=for-the-badge&labelColor=ff5c8a" />
+  <img alt="api: FastAPI" src="https://img.shields.io/badge/api-FastAPI-37d0ff?style=for-the-badge&labelColor=ff5c8a" />
+</p>
+
+## Atelier Mood
+
+This repo is presented like a digital art studio: image in, style in, generated result out.
+
+## Core Pipeline
+
+FastAPI handles uploads and orchestration while the model path performs neural style transfer with a web client on top.
+
+## Run The Engine
+
+`pip install -r requirements.txt` then run the API from `server.py` or the app package.
+
+## Portfolio Note
+
+This repository has its own visual identity inside the portfolio. The goal is that every project feels like a different product, not another copy of the same template.
+<!-- portfolio:end -->
+
+---
+
+## Existing Project Notes
+
 # Neural Style Transfer API
 
 A FastAPI and PyTorch project for applying neural style transfer to images. The app includes a focused web workbench and a documented API for submitting style transfer jobs, checking status, and downloading results.
